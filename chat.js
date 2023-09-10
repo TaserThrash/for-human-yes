@@ -42,10 +42,6 @@ function draw(){
             }
         }
     }
-
-    rect(width / 2, height - 40, 100, 20);
-    fill(0);
-    text(input, width / 2, height - 20);
 }
 
 function getChat() {
