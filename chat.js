@@ -9,14 +9,16 @@ function setup(){
 
     let inputElem = createInput('');
     inputElem.input(onInput);
-    inputElem.position(width / 2, width - 80);
-    
+    inputElem.position(width / 2, height - 20);
+
     let button = createButton('Click me!');
     button.mousePressed(onButtonClick);
 }
 
 function draw(){
     background(255);
+    noFill();
+    stroke(0);
     if(chat != 0){
         let a = 20;
         textSize(16);
@@ -26,6 +28,8 @@ function draw(){
                 stroke("green");
                 line(0, a + 2, width, a + 2);
                 pop();
+                push();
+                noStroke();
                 if(i.sender){
                     fill("blue");
                 }
@@ -34,9 +38,14 @@ function draw(){
                 }
                 text(i.text, width / 2 * (!i.sender), a);
                 a += 20;
+                pop();
             }
         }
     }
+
+    rect(width / 2, height - 40, 100, 20);
+    fill(0);
+    text(input, width / 2, height - 20);
 }
 
 function getChat() {
@@ -49,7 +58,9 @@ function getChat() {
 function onInput() {
     push();
     clear();
+    stroke("green");
     input = this.value();
+    text(input, width / 2, height - 80);
     pop();
 }
 
