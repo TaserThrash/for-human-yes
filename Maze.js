@@ -6,6 +6,8 @@ let grid = [];
 let win = false;
 let sliders = {};
 let v;
+let button;
+let mobile = true;
 
 function setup(){
     createCanvas(windowWidth - 4, windowHeight - 60);
@@ -75,13 +77,50 @@ function setup(){
         fov: createSlider(40, 90, 60, 0),
         res: createSlider(64, 512, 128, 0),
         step: createSlider(0.01, 1, 0.125, 0),
-        fps: createSlider(10, 144)
+        fps: createSlider(10, 144, 60)
     };
 
     sliders.fov.style("width", "10%");
     sliders.res.style("width", "10%");
     sliders.step.style("width", "40%");
     sliders.fps.style("width", "10%");
+
+    button = createButton("TOGGLE INPUT MODE");
+    button.mouseClicked(() => {
+        mobile = !mobile;
+    });
+    button.size(width * 0.1, height * 0.072);
+
+    //left
+    createMobileButton(0.1, 0.8, 0.05, 0.05, "red", () => {
+        x -= cos(d + PI / 2) / 20;
+        y -= sin(d + PI / 2) / 20;
+    }, "hold");
+    //bottom
+    createMobileButton(0.15, 0.85, 0.05, 0.05, "red", () => {
+        x -= cos(d) / 20;
+        y -= sin(d) / 20;
+    }, "hold");
+    //up
+    createMobileButton(0.15, 0.75, 0.05, 0.05, "red", () => {
+        x += cos(d) / 20;
+        y += sin(d) / 20;
+    }, "hold");
+    //right
+    createMobileButton(0.2, 0.8, 0.05, 0.05, "red", () => {
+        x += cos(d + PI / 2) / 20;
+        y += sin(d + PI / 2) / 20;
+    }, "hold");
+
+    //turnRight
+    createMobileButton(0.85, 0.8, 0.05, 0.05, "red", () => {
+        d += 0.02;
+    }, "hold");
+
+    //turnLeft
+    createMobileButton(0.8, 0.8, 0.05, 0.05, "orange", () => {
+        d -= 0.02;
+    }, "hold");
 }
 
 function draw(){
@@ -97,6 +136,7 @@ function draw(){
 
     let px = x;
     let py = y;
+
     if(keyIsDown(UP_ARROW) || keyIsDown(87)){
         x += cos(d) / 20;
         y += sin(d) / 20;
@@ -123,6 +163,10 @@ function draw(){
 
     if(keyIsDown(LEFT_ARROW)){
         d -= 0.02;
+    }
+
+    if(mobile){
+        handleHoldButtons();
     }
 
     if(!grid[int(y)] || !grid[int(y)][int(x)]){
@@ -157,20 +201,6 @@ function draw(){
         
         fill(abs(0.5 - yes(p.x)) * 255, abs(0.5 - yes(p.y)) * 255, 255);
 
-        /*switch(p.side){
-            case "top":
-                fill("green");
-                break;
-            case "bottom":
-                fill("blue");
-                break;
-            case "left":
-                fill("red");
-                break;
-            case "right":
-                fill("orange");
-        }*/
-
         rect(width / 2 + i * (width / fov), height / 2, ceil(width / res), height * 2 / distance);
     }
 
@@ -178,6 +208,10 @@ function draw(){
     if(win){
         fill("green");
         text("VICTORY", width / 2, height / 2);
+    }
+
+    if(mobile){
+        drawButtons();
     }
 }
 
